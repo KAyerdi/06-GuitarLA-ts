@@ -1,32 +1,35 @@
+import { useReducer } from "react"
 import Guitar from "./components/Guitar"
 import Header from "./components/Header"
 import { useCart } from './hooks/useCart'
+import { cartReducer, initialState } from "./reducers/cart-reduce"
 
 function App() {
 
-  const { data, cart, addToCart, removeFromCart, decreaseQuantity, increaseQuantity, clearCart, isEmpty, cartTotal } = useCart()
+  const { decreaseQuantity, increaseQuantity, clearCart } = useCart()
+
+  const [state, dispatch] = useReducer(cartReducer, initialState)
+  console.log(state)
 
   return (
     <>
-      <Header 
-        cart={cart}
-        removeFromCart={removeFromCart}
+      <Header
+        cart={state.cart}
+        dispatch={dispatch}
         decreaseQuantity={decreaseQuantity}
         increaseQuantity={increaseQuantity}
         clearCart={clearCart}
-        isEmpty={isEmpty}
-        cartTotal={cartTotal}
       />
       
       <main className="container-xl mt-5">
           <h2 className="text-center">Nuestra Colección</h2>
 
           <div className="row mt-5">
-              {data.map((guitar) => (
-                  <Guitar 
+              {state.data.map((guitar) => (
+                  <Guitar
                     key={guitar.id}
                     guitar={guitar}
-                    addToCart={addToCart}
+                    dispatch={dispatch}
                   />
               ))}
               
